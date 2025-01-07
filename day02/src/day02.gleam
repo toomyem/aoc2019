@@ -35,6 +35,20 @@ fn run(d, i) {
   }
 }
 
+fn find(d) {
+  let ans =
+    tools.cartesian(list.range(0, 99), list.range(0, 99))
+    |> list.find(fn(v) {
+      let #(noun, verb) = v
+      let ans = d |> restore(noun, verb) |> run(0) |> get(0)
+      ans == 19_690_720
+    })
+  case ans {
+    Error(_) -> panic as "unexpected"
+    Ok(v) -> v
+  }
+}
+
 pub fn main() {
   let d =
     tools.read_line()
@@ -46,4 +60,6 @@ pub fn main() {
     |> list.index_fold(dict.new(), fn(d, v, i) { dict.insert(d, i, v) })
   let n = d |> restore(12, 2) |> run(0) |> get(0)
   io.println("Solution 1: " <> n |> int.to_string)
+  let #(noun, verb) = find(d)
+  io.println("Solution 2: " <> { noun * 100 + verb } |> int.to_string)
 }
