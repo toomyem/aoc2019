@@ -27,3 +27,8 @@ pub fn to_int_list(l: List(String)) -> List(Int) {
     v
   })
 }
+
+pub fn int_list_to_string(l: List(Int)) -> String {
+  list.fold(l, "", fn(acc, v) { acc <> int.to_string(v) <> "," })
+  |> string.drop_end(1)
+}
