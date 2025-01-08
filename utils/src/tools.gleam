@@ -1,4 +1,5 @@
 import gleam/erlang
+import gleam/int
 import gleam/list
 import gleam/string
 
@@ -18,4 +19,11 @@ pub fn read_lines() -> List(String) {
 
 pub fn cartesian(l1: List(a), l2: List(b)) -> List(#(a, b)) {
   list.flat_map(l1, fn(v1) { list.map(l2, fn(v2) { #(v1, v2) }) })
+}
+
+pub fn to_int_list(l: List(String)) -> List(Int) {
+  list.map(l, fn(s) {
+    let assert Ok(v) = int.parse(s)
+    v
+  })
 }

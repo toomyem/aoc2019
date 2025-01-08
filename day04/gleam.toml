@@ -1,0 +1,11 @@
+name = "day04"
+version = "1.0.0"
+repository = { type = "github", user = "toomyem", repo = "aoc2019" }
+
+[dependencies]
+gleam_stdlib = ">= 0.34.0 and < 2.0.0"
+utils = { path = "../utils" }
+gleam_regexp = ">= 1.0.0 and < 2.0.0"
+
+[dev-dependencies]
+gleeunit = ">= 1.0.0 and < 2.0.0"
