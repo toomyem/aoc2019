@@ -32,3 +32,10 @@ pub fn int_list_to_string(l: List(Int)) -> String {
   list.fold(l, "", fn(acc, v) { acc <> int.to_string(v) <> "," })
   |> string.drop_end(1)
 }
+
+pub fn unwrap(r) {
+  case r {
+    Ok(v) -> v
+    Error(_) -> panic as "unexpected error"
+  }
+}

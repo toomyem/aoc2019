@@ -53,11 +53,9 @@ pub fn main() {
   let d =
     tools.read_line()
     |> string.split(",")
-    |> list.map(fn(v) {
-      let assert Ok(v) = int.parse(v)
-      v
-    })
+    |> tools.to_int_list
     |> list.index_fold(dict.new(), fn(d, v, i) { dict.insert(d, i, v) })
+
   let n = d |> restore(12, 2) |> run(0) |> get(0)
   io.println("Solution 1: " <> n |> int.to_string)
   let #(noun, verb) = find(d)
