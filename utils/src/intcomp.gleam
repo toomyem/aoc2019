@@ -3,7 +3,13 @@ import gleam/int
 import gleam/list
 
 pub type State {
-  State(mem: dict.Dict(Int, Int), pc: Int, input: List(Int), output: List(Int))
+  State(
+    mem: dict.Dict(Int, Int),
+    pc: Int,
+    input: List(Int),
+    output: List(Int),
+    paused: Bool,
+  )
 }
 
 type Instr {
@@ -22,7 +28,7 @@ pub fn init(data: List(Int)) -> State {
   let mem =
     data
     |> list.index_fold(dict.new(), fn(acc, v, i) { dict.insert(acc, i, v) })
-  State(mem:, pc: 0, input: [], output: [])
+  State(mem:, pc: 0, input: [], output: [], paused: False)
 }
 
 fn decode(code: Int) -> Instr {
@@ -75,7 +81,7 @@ fn in(s: State) -> State {
   case s.input {
     [v, ..rest] ->
       State(..s, mem: dict.insert(s.mem, a, v), input: rest, pc: s.pc + 2)
-    [] -> panic as "input underflow"
+    [] -> State(..s, paused: True)
   }
 }
 
@@ -125,6 +131,7 @@ fn equals(s: State, mode: Int) -> State {
 }
 
 pub fn run(s: State) {
+  let s = State(..s, paused: False)
   case dict.get(s.mem, s.pc) {
     Error(Nil) -> panic as { "not found in mem: " <> int.to_string(s.pc) }
     Ok(code) -> {
@@ -133,7 +140,11 @@ pub fn run(s: State) {
         Add(mode) -> run(add(s, mode))
         Mul(mode) -> run(mul(s, mode))
         Out(mode) -> run(out(s, mode))
-        In -> run(in(s))
+        In ->
+          case in(s) {
+            s if s.paused -> s
+            s -> run(s)
+          }
         JmpTrue(mode) -> run(jmp_true(s, mode))
         JmpFalse(mode) -> run(jmp_false(s, mode))
         LessThen(mode) -> run(less_then(s, mode))
