@@ -1,8 +1,7 @@
 import gleam/int
 import gleam/io
 import gleam/list
-import gleam/string
-import intcomp.{State, run}
+import intcomp.{State, init, run}
 import tools
 
 fn compute(state, phases: List(Int), sig) -> Int {
@@ -45,8 +44,7 @@ fn check2(state) {
 }
 
 pub fn main() {
-  let state =
-    tools.read_line() |> string.split(",") |> tools.to_int_list |> intcomp.init
+  let state = tools.read_line() |> init
   io.println("Solution 1: " <> check(state) |> int.to_string)
   io.println("Solution 2: " <> check2(state) |> int.to_string)
 }
